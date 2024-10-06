@@ -16,7 +16,7 @@ const UserCard: React.FC<UserCardProps> = ({ id, content, footer, onClick }) => 
     };
 
     return (
-        <Card className="w-full shadow-none transition-shadow duration-300 cursor-pointer hover:shadow-lg hover:shadow-gray-400" onClick={() => handlClick(id)}>
+        <Card className="w-full shadow-none transition-shadow duration-300 cursor-pointer hover:shadow-lg hover:shadow-gray-400" onClick={() => handleClick()}>
             <CardHeader>
                 {/* <CardTitle>Create project</CardTitle> */}
                 {/* <CardDescription>Deploy your new project in one-click.</CardDescription> */}

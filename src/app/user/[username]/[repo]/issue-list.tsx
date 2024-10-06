@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { Endpoints } from "@octokit/types";
-import { DataTable } from "@/components/ui/data-table";
-import { ColumnDef } from "@tanstack/react-table"
-import useApi from "@/hooks/use-api";
-import ListComponent from "@/components/list";
+// import useApi from "@/hooks/use-api";
 import { useParams } from "next/navigation";
+import moment from "moment";
+import List from "@/components/list";
+import { getRepoIssues } from "@/lib/github";
 
 interface State {
     data: Endpoints["GET /repos/{owner}/{repo}/issues"]["response"]['data'],
@@ -19,7 +19,7 @@ export default function IssueList() {
         data: [],
         loading: true,
     })
-    const { getRepoIssues } = useApi();
+    // const { getRepoIssues } = useApi();
     const params: { username: string, repo: string } = useParams();
 
     const loadData = async () => {
@@ -31,25 +31,17 @@ export default function IssueList() {
 
     }
 
-    // const getList = () => {
-    //     return state.data.map(item => {
-    //         return { name: item.name, description: `${item.stargazers_count} stars / ${item.watchers_count} watchers` }
-    //     })
-    // }
+    const getList = () => {
+        return state.data.map(item => {
+            return {
+                id: item.id, name: item.title, description: `${moment(item.created_at).fromNow()} ${item.user ? 'by ' + item.user.login : null}`
+            }
+        })
+    }
 
     useEffect(() => {
         loadData();
     }, [])
 
-    return (
-        <>
-            <h1 className="text-4xl font-extrabold">Open Issues</h1>
-            <hr />
-            <br />
-
-            {/* <ListComponent data={getList()} /> */}
-
-        </>
-
-    )
+    return <List loading={state.loading} data={getList()} />
 }

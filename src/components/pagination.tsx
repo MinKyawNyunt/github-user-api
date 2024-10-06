@@ -17,12 +17,12 @@ export interface PaginationProps {
 
 export const Pagination: React.FC<PaginationProps> = ({
     totalPages,
-    totalPagesToDisplay = 5,
+    totalPagesToDisplay = 3,
     currentPage,
     setCurrentPage,
 }: PaginationProps) => {
-    const showLeftEllipsis = currentPage - 1 > totalPagesToDisplay / 2;
-    const showRightEllipsis = totalPages - (currentPage + 1) > totalPagesToDisplay / 2;
+    let showLeftEllipsis = currentPage - 1 > totalPagesToDisplay / 2;
+    let showRightEllipsis = totalPages - (currentPage + 1) > totalPagesToDisplay / 2;
 
     const getPageNumbers = () => {
         if (totalPages <= totalPagesToDisplay) {

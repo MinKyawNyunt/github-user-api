@@ -4,9 +4,12 @@ import { useEffect, useState } from "react"
 import { Endpoints } from "@octokit/types";
 import { DataTable } from "@/components/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table"
-import useApi from "@/hooks/use-api";
+// import useApi from "@/hooks/use-api";
 import ListComponent from "@/components/list";
 import { useParams } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useTransitionRouter } from "next-view-transitions";
+import { getUserRepos } from "@/lib/github";
 
 interface State {
     data: Endpoints["GET /users/{username}/repos"]["response"]['data'],
@@ -19,11 +22,13 @@ export default function List() {
         data: [],
         loading: true,
     })
-    const { getUserRepos } = useApi();
+    // const { getUserRepos } = useApi();
     const params: { username: string } = useParams();
+    const router = useTransitionRouter();
 
 
     const loadData = async () => {
+        setState(state => ({ ...state, loading: true }))
         const res = await getUserRepos(params.username)
 
         if (res) {
@@ -34,23 +39,23 @@ export default function List() {
 
     const getList = () => {
         return state.data.map(item => {
-            return { name: item.name, description: `${item.stargazers_count} stars / ${item.watchers_count} watchers` }
+            return { id: item.name, name: item.name, description: `${item.stargazers_count} stars / ${item.watchers_count} watchers` }
         })
+    }
+
+    const handleClick = (id: string) => {
+        router.push(`/user/${params.username}/${id}`)
     }
 
     useEffect(() => {
         loadData();
     }, [])
 
-    console.log(state)
-
     return (
         <>
-            <h1 className="text-4xl font-extrabold">REPOSITORIES</h1>
-            <hr />
-            <br />
 
-            <ListComponent data={getList()} />
+
+            <ListComponent loading={state.loading} onClick={handleClick} data={getList()} />
 
         </>
 

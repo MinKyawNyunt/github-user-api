@@ -5,8 +5,9 @@ import Loader from "./user/loader";
 import Image from "next/image";
 import Grid from "@/components/grid";
 import { useTransitionRouter } from "next-view-transitions";
-import useApi from "@/hooks/use-api";
+// import useApi from "@/hooks/use-api";
 import { useParams, useSearchParams } from "next/navigation";
+import { searchUsers } from "@/lib/github";
 // import { SearchUsersResponse } from '@octokit/types';
 
 interface User {
@@ -27,7 +28,7 @@ export default function Users() {
         data: [],
     })
     const router = useTransitionRouter();
-    const { searchUsers } = useApi();
+    // const { searchUsers } = useApi();
     const searchParams = useSearchParams();
     const q = searchParams.get('q');
 
@@ -46,7 +47,7 @@ export default function Users() {
     }, [])
 
     const handleClick = (id: string) => {
-        router.push(`/user/${encodeURIComponent(id)}/repos`)
+        router.push(`/user/${encodeURIComponent(id)}`)
     }
 
     if (state.loading) {
