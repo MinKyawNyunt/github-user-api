@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import UserCard from "../../components/user-card";
-import Loader from "./user/loader";
+import Loader from "./loader";
 import Image from "next/image";
 import Grid from "@/components/grid";
 import { useTransitionRouter } from "next-view-transitions";
@@ -59,7 +59,7 @@ export default function Users() {
     }, [q])
 
     const handleClick = (id: string) => {
-        router.push(`/user/${encodeURIComponent(id)}`)
+        router.push(`/${encodeURIComponent(id)}`)
     }
 
     if (state.loading) {

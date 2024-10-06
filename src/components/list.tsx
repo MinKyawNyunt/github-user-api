@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Pagination } from './pagination';
 import { Skeleton } from './ui/skeleton';
+import NoData from './no-data';
 
 interface DataProps {
     id: string | number,
@@ -33,9 +34,9 @@ export default function List({ data, onClick, loading }: ListProps) {
     const renderLi = (items: DataProps[]) => {
         {
             return items.map((item, i) => (
-                <li onClick={() => handleClick(item.id)} key={i} className="w-full px-4 py-2 border-b border-gray-200 rounded-t-lg hover:bg-gray-100 flex justify-between">
-                    <span className='flex-1'>{item.name}</span>
-                    <span className='flex-1 text-right'>{item.description}</span>
+                <li onClick={() => handleClick(item.id)} key={i} className="w-full px-4 py-2 rounded-t-lg hover:bg-gray-100 flex justify-between">
+                    <span className='flex-1 font-bold'>{item.name}</span>
+                    <span className='flex-1 text-right font-bold'>{item.description}</span>
                 </li>
             ))
         }
@@ -74,9 +75,13 @@ export default function List({ data, onClick, loading }: ListProps) {
         }
     }
 
+    if (!loading && !data.length) {
+        return <NoData />
+    }
+
     return (
-        <div className='flex flex-col space-y-5 '>
-            <div className='min-h-44'>
+        <div className='flex flex-col space-y-5 justify-center items-center w-full'>
+            <div className='min-h-44 w-11/12 max-w-3xl'>
                 <ul className="w-full text-sm font-medium text-gray-900 bg-white">
                     {/* {loading ? '' : {  }} */}
                     {loading ? renderSkeleton() : renderLi(currentItems)}
