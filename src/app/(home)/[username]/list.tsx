@@ -10,6 +10,7 @@ import { useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTransitionRouter } from "next-view-transitions";
 import { getUserRepos } from "@/lib/github";
+import GoBackBtn from "@/components/go-back-btn";
 
 interface State {
     data: Endpoints["GET /users/{username}/repos"]["response"]['data'],
@@ -44,8 +45,8 @@ export default function List() {
         })
     }
 
-    const handleClick = (id: string) => {
-        router.push(`/user/${params.username}/${id}`)
+    const handleClick = (id: string | number) => {
+        router.push(`/${params.username}/${id}`)
     }
 
     useEffect(() => {
@@ -55,10 +56,12 @@ export default function List() {
     return (
         <>
             <div className="flex justify-center mb-10">
-                <h1 className="text-4xl font-extrabold">{params.username.toUpperCase()} REPOSITORIES</h1>
+                <h1 className="text-4xl font-extrabold text-center">{params.username.toUpperCase()} REPOSITORIES</h1>
             </div>
 
             <ListComponent loading={state.loading} onClick={handleClick} data={getList()} />
+
+            <GoBackBtn />
 
         </>
 
