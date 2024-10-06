@@ -59,10 +59,20 @@ export const createIssue = async (
     title: string,
     body: string
 ) => {
-    return await request("POST /repos/{owner}/{repo}/issues", {
-        owner: owner,
-        repo: repo,
-        title: title,
-        body: body,
-    });
+    try {
+        return await request("POST /repos/{owner}/{repo}/issues", {
+            owner: owner,
+            repo: repo,
+            title: title,
+            body: body,
+        });
+    } catch (error) {
+        if (error instanceof RequestError && error.status === 404) { //issue setting error
+            return { status: false, message: "An Error Occur. This is probably issues are disabled by repo owner!" }
+        }
+
+        throw error
+    }
+
+
 };
