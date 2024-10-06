@@ -32,8 +32,18 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea";
 import { createIssue } from "@/actions/github";
 import { useParams } from "next/navigation";
+import useHandleError from "@/hooks/use-handle-error";
+import { useState } from "react";
+import { useTransitionRouter } from "next-view-transitions";
+import { State } from "./client";
 
-export default function NewIssue() {
+interface NewIssueProps {
+    state: State;
+    setState: React.Dispatch<React.SetStateAction<State>>;
+}
+
+export default function NewIssue({ state, setState }: NewIssueProps) {
+
     const formSchema = z.object({
         title: z.string().min(1, { message: "Title is required!" }),
         description: z.string().min(1, { message: "Description is required!" }),
@@ -47,17 +57,27 @@ export default function NewIssue() {
         },
     })
     const params: { username: string, repo: string } = useParams();
-
-    // const { createIssue } = useApi();
+    const handleError = useHandleError();
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const res = await createIssue(params.username, params.repo, values.title, values.description)
+        setState(state => ({ ...state, disabled: true }))
+        try {
+            const res = await createIssue(params.username, params.repo, values.title, values.description)
 
-        console.log(res)
+            if (res) {
+                setState(state => ({ ...state, disabled: false, open: false, refresh: true }))
+            }
+
+
+        } catch (error) {
+            handleError(error, false)
+            setState(state => ({ ...state, disabled: false }))
+        }
+
     }
 
     return (
-        <Dialog>
+        <Dialog open={state.open} onOpenChange={() => setState(state => ({ ...state, open: !state.open }))}>
             <DialogTrigger asChild>
                 <Button >New Issue</Button>
             </DialogTrigger>
@@ -78,7 +98,7 @@ export default function NewIssue() {
                                 <FormItem>
                                     <FormLabel>Title</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Title" {...field} />
+                                        <Input disabled={state.disabled} placeholder="Title" {...field} />
                                     </FormControl>
                                     {/* <FormDescription>
                                         This is your public display name.
@@ -95,7 +115,7 @@ export default function NewIssue() {
                                 <FormItem>
                                     <FormLabel>Description</FormLabel>
                                     <FormControl>
-                                        <Textarea placeholder="Description" {...field} />
+                                        <Textarea disabled={state.disabled} placeholder="Description" {...field} />
                                     </FormControl>
                                     {/* <FormDescription>
                                         This is your public display name.
@@ -108,10 +128,9 @@ export default function NewIssue() {
 
                         <DialogFooter>
                             <DialogClose asChild>
-                                <Button variant="outline">Cancel</Button>
+                                <Button disabled={state.disabled} variant="outline" className="mb-1">Cancel</Button>
                             </DialogClose>
-                            {/* <Button variant="outline">Cancel</Button> */}
-                            <Button type="submit">Create</Button>
+                            <Button type="submit" disabled={state.disabled} className="mb-1">Create</Button>
                         </DialogFooter>
                     </form>
                 </Form>

@@ -44,6 +44,10 @@ export default function List({ data, onClick, loading }: ListProps) {
 
     const renderSkeleton = () => {
         {
+            if (currentPage !== 1) {
+                setCurrentPage(1)
+            }
+
             return (
                 <>
                     <li className="w-full border rounded-sm p-4 mb-2 shadow hover:bg-gray-100 flex justify-between">
