@@ -34,9 +34,9 @@ export default function List({ data, onClick, loading }: ListProps) {
     const renderLi = (items: DataProps[]) => {
         {
             return items.map((item, i) => (
-                <li onClick={() => handleClick(item.id)} key={i} className="w-full border rounded-full p-4 mb-4 shadow hover:bg-gray-100 flex justify-between">
-                    <span className='flex-1 font-bold'>{item.name}</span>
-                    <span className='flex-1 text-right font-bold'>{item.description}</span>
+                <li onClick={() => handleClick(item.id)} key={i} className="w-full border rounded-sm p-4 mb-2 shadow hover:bg-gray-100 flex justify-between">
+                    <span className='flex flex-1 items-center font-bold'>{item.name}</span>
+                    <span className='flex-1 items-center text-right font-bold'>{item.description}</span>
                 </li>
             ))
         }
@@ -46,27 +46,27 @@ export default function List({ data, onClick, loading }: ListProps) {
         {
             return (
                 <>
-                    <li className="w-full border rounded-full p-4 mb-4 shadow hover:bg-gray-100 flex justify-between">
+                    <li className="w-full border rounded-sm p-4 mb-2 shadow hover:bg-gray-100 flex justify-between">
                         <Skeleton className="h-5 w-24" />
                         <Skeleton className="h-5 w-12" />
                     </li>
 
-                    <li className="w-full border rounded-full p-4 mb-4 shadow hover:bg-gray-100 flex justify-between">
+                    <li className="w-full border rounded-sm p-4 mb-2 shadow hover:bg-gray-100 flex justify-between">
                         <Skeleton className="h-5 w-20" />
                         <Skeleton className="h-5 w-12" />
                     </li>
 
-                    <li className="w-full border rounded-full p-4 mb-4 shadow hover:bg-gray-100 flex justify-between">
+                    <li className="w-full border rounded-sm p-4 mb-2 shadow hover:bg-gray-100 flex justify-between">
                         <Skeleton className="h-5 w-28" />
                         <Skeleton className="h-5 w-12" />
                     </li>
 
-                    <li className="w-full border rounded-full p-4 mb-4 shadow hover:bg-gray-100 flex justify-between">
+                    <li className="w-full border rounded-sm p-4 mb-2 shadow hover:bg-gray-100 flex justify-between">
                         <Skeleton className="h-5 w-24" />
                         <Skeleton className="h-5 w-12" />
                     </li>
 
-                    <li className="w-full border rounded-full p-4 mb-4 shadow hover:bg-gray-100 flex justify-between">
+                    <li className="w-full border rounded-sm p-4 mb-2 shadow hover:bg-gray-100 flex justify-between">
                         <Skeleton className="h-5 w-24" />
                         <Skeleton className="h-5 w-12" />
                     </li>

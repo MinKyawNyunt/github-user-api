@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import moment from "moment";
 import List from "@/components/list";
 import { getRepoIssues } from "@/actions/github";
+import useHandleError from "@/hooks/use-handle-error";
 
 interface State {
     data: Endpoints["GET /repos/{owner}/{repo}/issues"]["response"]['data'],
@@ -21,13 +22,19 @@ export default function IssueList() {
     })
     // const { getRepoIssues } = useApi();
     const params: { username: string, repo: string } = useParams();
+    const handleEror = useHandleError();
 
     const loadData = async () => {
-        const res = await getRepoIssues(params.username, params.repo)
-        console.log(res)
-        if (res) {
-            setState(state => ({ ...state, data: res.data, loading: false }))
+
+        try {
+            const res = await getRepoIssues(params.username, params.repo)
+            if (res) {
+                setState(state => ({ ...state, data: res.data, loading: false }))
+            }
+        } catch (error) {
+            handleEror(error)
         }
+
 
     }
 

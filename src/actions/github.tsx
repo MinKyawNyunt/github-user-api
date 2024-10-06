@@ -4,7 +4,7 @@ import { Octokit as OK } from "octokit";
 
 const octokit = new OK({
     auth: process.env.GITHUB_TOKEN,
-    // auth: process.env.GITHUB_TOKEN,
+    // auth: 'test',
 });
 
 export const getUsers = async () => {

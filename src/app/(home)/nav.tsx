@@ -15,7 +15,7 @@ export default function Nav() {
     const router = useTransitionRouter();
     const pathname = usePathname()
 
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             router.push(`/?q=${search}`)
         }
@@ -23,14 +23,21 @@ export default function Nav() {
 
 
     return (
-        <div className="flex items-center justify-between h-20 border-b border-gray-300 shadow-md px-5">
+        <div className="flex items-center justify-between h-20 border-b border-gray-300 shadow-md px-5 space-x-1">
             <div>
-                {pathname !== '/' && <Button onClick={() => router.back()}> <ChevronLeftIcon /> Go Back</Button>}
+                {pathname !== '/' &&
+                    <Button onClick={() => router.back()}>
+                        <ChevronLeftIcon />
+                        <span className="hidden sm:block">Go Back</span>
+                    </Button>}
             </div>
 
             <div className="flex flex-grow max-w-3xl space-x-1">
                 <Input value={search} type="Search" placeholder="Search User" onChange={(e) => setSearch(e.target.value)} onKeyDown={handleKeyDown} />
 
+                <div>
+
+                </div>
                 <Button onClick={() => router.push(`/?q=${search}`)} >Search</Button>
             </div>
 

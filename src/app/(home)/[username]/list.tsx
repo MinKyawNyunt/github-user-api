@@ -10,6 +10,7 @@ import { useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTransitionRouter } from "next-view-transitions";
 import { getUserRepos } from "@/actions/github";
+import useHandleError from "@/hooks/use-handle-error";
 
 interface State {
     data: Endpoints["GET /users/{username}/repos"]["response"]['data'],
@@ -22,22 +23,28 @@ export default function List() {
         data: [],
         loading: true,
     })
-    // const { getUserRepos } = useApi();
+
     const params: { username: string } = useParams();
     const router = useTransitionRouter();
+    const handleEror = useHandleError();
 
 
     const loadData = async () => {
         setState(state => ({ ...state, loading: true }))
-        const res = await getUserRepos(params.username)
 
-        if (res) {
-            setState(state => ({ ...state, data: res.data, loading: false }))
+        try {
+            const res = await getUserRepos(params.username)
+
+            if (res) {
+                setState(state => ({ ...state, data: res.data, loading: false }))
+            }
+        } catch (error) {
+            handleEror(error)
         }
+
 
     }
 
-    console.log(state)
     const getList = () => {
         return state.data.map(item => {
             return { id: item.name, name: item.name, description: `${item.stargazers_count} stars / ${item.watchers_count} watchers` }
@@ -58,7 +65,10 @@ export default function List() {
                 <h1 className="text-4xl font-extrabold text-center">{params.username.toUpperCase()} REPOSITORIES</h1>
             </div>
 
-            <ListComponent loading={state.loading} onClick={handleClick} data={getList()} />
+            <div className="m-auto w-11/12 max-w-3xl">
+                <ListComponent loading={state.loading} onClick={handleClick} data={getList()} />
+            </div>
+
 
         </>
 

@@ -9,7 +9,7 @@ export default function Page({ params }: { params: { username: string, repo: str
                 <h1 className="text-4xl font-extrabold text-center">{params.repo.toUpperCase()} REPOSITORY</h1>
             </div>
 
-            <div className="max-w-3xl m-auto">
+            <div className="m-auto w-11/12 max-w-3xl">
                 <div className="flex justify-end mb-10">
                     <NewIssue />
                 </div>

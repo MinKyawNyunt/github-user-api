@@ -10,11 +10,13 @@ export default function Layout({ children }: LayoutProps) {
 
 
     return (
-        <>
+        <div className="flex flex-col">
             <Nav />
-            <Container>
-                {children}
-            </Container>
-        </>
+            <div className="flex-grow">
+                <Container>
+                    {children}
+                </Container>
+            </div>
+        </div>
     )
 }
