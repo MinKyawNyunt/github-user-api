@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea";
-import { createIssue } from "@/lib/github";
+import { createIssue } from "@/actions/github";
 import { useParams } from "next/navigation";
 
 export default function NewIssue() {

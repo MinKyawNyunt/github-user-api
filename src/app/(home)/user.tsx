@@ -7,8 +7,9 @@ import Grid from "@/components/grid";
 import { useTransitionRouter } from "next-view-transitions";
 // import useApi from "@/hooks/use-api";
 import { useParams, useSearchParams } from "next/navigation";
-import { getUsers, searchUsers } from "@/lib/github";
+import { getUsers, searchUsers } from "@/actions/github";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import useHandleError from "@/hooks/use-handle-error";
 // import { SearchUsersResponse } from '@octokit/types';
 
 interface User {
@@ -32,26 +33,31 @@ export default function Users() {
     // const { searchUsers } = useApi();
     const searchParams = useSearchParams();
     const q = searchParams.get('q');
-
-    console.log(q)
+    const handleError = useHandleError();
     useEffect(() => {
         async function init() {
 
             setState(state => ({ ...state, loading: true }))
 
-            if (q) {
-                const res = await searchUsers(q);
+            try {
+                if (q) {
+                    const res = await searchUsers(q);
 
-                if (res) {
-                    setState(state => ({ ...state, data: res.data.items, loading: false }))
-                }
-            } else {
-                const res = await getUsers();
+                    if (res) {
+                        setState(state => ({ ...state, data: res.data.items, loading: false }))
+                    }
+                } else {
+                    const res = await getUsers();
 
-                if (res) {
-                    setState(state => ({ ...state, data: res.data, loading: false }))
+                    if (res) {
+                        setState(state => ({ ...state, data: res.data, loading: false }))
+                    }
                 }
+            } catch (error) {
+                handleError(error)
             }
+
+
 
         }
 

@@ -9,8 +9,7 @@ import ListComponent from "@/components/list";
 import { useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTransitionRouter } from "next-view-transitions";
-import { getUserRepos } from "@/lib/github";
-import GoBackBtn from "@/components/go-back-btn";
+import { getUserRepos } from "@/actions/github";
 
 interface State {
     data: Endpoints["GET /users/{username}/repos"]["response"]['data'],
@@ -60,8 +59,6 @@ export default function List() {
             </div>
 
             <ListComponent loading={state.loading} onClick={handleClick} data={getList()} />
-
-            <GoBackBtn />
 
         </>
 

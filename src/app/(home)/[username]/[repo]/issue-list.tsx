@@ -6,7 +6,7 @@ import { Endpoints } from "@octokit/types";
 import { useParams } from "next/navigation";
 import moment from "moment";
 import List from "@/components/list";
-import { getRepoIssues } from "@/lib/github";
+import { getRepoIssues } from "@/actions/github";
 
 interface State {
     data: Endpoints["GET /repos/{owner}/{repo}/issues"]["response"]['data'],

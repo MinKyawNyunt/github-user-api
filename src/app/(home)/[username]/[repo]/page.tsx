@@ -1,7 +1,6 @@
 import Container from "@/components/container"
 import IssueList from "./issue-list"
 import NewIssue from "./new-issue"
-import GoBackBtn from "@/components/go-back-btn"
 
 export default function Page({ params }: { params: { username: string, repo: string } }) {
     return (
@@ -15,8 +14,6 @@ export default function Page({ params }: { params: { username: string, repo: str
                     <NewIssue />
                 </div>
                 <IssueList />
-
-                <GoBackBtn />
             </div>
         </Container>
     )
