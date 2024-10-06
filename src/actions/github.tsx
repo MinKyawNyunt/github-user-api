@@ -23,10 +23,6 @@ const request = async (url: string, payload: Record<string, string> = {}) => {
             if (error.status === 401) {
                 return { status: false, message: "Invalid Github Token" }
             }
-
-            if (error.message === 'Issues are disabled for this repo - https://docs.github.com/v3/issues/') {
-                return { status: false, message: 'Issues are disabled for this repo by repo owner', data: [] }
-            }
         }
 
         throw error;
