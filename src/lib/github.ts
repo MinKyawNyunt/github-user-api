@@ -6,6 +6,10 @@ const octokit = new OK({
   auth: process.env.GITHUB_TOKEN,
 });
 
+export const getUsers = async () => {
+  return await octokit.request("GET /users");
+};
+
 export const searchUsers = async (q: string) => {
   return await octokit.request("GET /search/users", {
     q: q,
