@@ -21,8 +21,8 @@ export const Pagination: React.FC<PaginationProps> = ({
     currentPage,
     setCurrentPage,
 }: PaginationProps) => {
-    let showLeftEllipsis = currentPage - 1 > totalPagesToDisplay / 2;
-    let showRightEllipsis = totalPages - (currentPage + 1) > totalPagesToDisplay / 2;
+    const showLeftEllipsis = currentPage - 1 > totalPagesToDisplay / 2;
+    const showRightEllipsis = totalPages - (currentPage + 1) > totalPagesToDisplay / 2;
 
     const getPageNumbers = () => {
         if (totalPages <= totalPagesToDisplay) {

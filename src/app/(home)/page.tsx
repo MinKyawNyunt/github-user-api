@@ -1,9 +1,9 @@
 import Users from "./user"
 
-export default function Page() {
+export default function Page({ searchParams }: { searchParams: { q: string } }) {
     return (
         <>
-            <Users />
+            <Users q={searchParams.q} />
         </>
     )
 }

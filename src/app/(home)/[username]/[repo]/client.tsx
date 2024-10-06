@@ -1,43 +1,10 @@
 "use client"
-
-import { Button } from "@/components/ui/button";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogClose
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-
-
-
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea";
-import { createIssue, getRepoIssues } from "@/actions/github";
-import { useParams, useRouter } from "next/navigation";
+import { getRepoIssues } from "@/actions/github";
+import { useParams } from "next/navigation";
 import useHandleError from "@/hooks/use-handle-error";
 import { useEffect, useState } from "react";
-import { useTransitionRouter } from "next-view-transitions";
 import NewIssue from "./new-issue";
 import { Endpoints } from "@octokit/types";
-import IssueList from "./issue-list";
 import List from "@/components/list";
 import moment from "moment";
 
@@ -57,7 +24,7 @@ export default function Client() {
         loading: true,
         refresh: true,
     })
-    const handleEror = useHandleError();
+    const { showErrorMessage, handleError } = useHandleError();
     const params: { username: string, repo: string } = useParams();
 
     useEffect(() => {
@@ -71,11 +38,14 @@ export default function Client() {
         setState(state => ({ ...state, loading: true }))
         try {
             const res = await getRepoIssues(params.username, params.repo)
-            if (res) {
+            if (res.status) {
                 setState(state => ({ ...state, data: res.data, loading: false, refresh: false }))
+            } else {
+                showErrorMessage(res.message)
+                setState(state => ({ ...state, loading: false, refresh: false }))
             }
         } catch (error) {
-            handleEror(error)
+            handleError(error)
         }
     }
 

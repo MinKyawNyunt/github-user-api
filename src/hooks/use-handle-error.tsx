@@ -5,14 +5,33 @@ export default function useHandleError() {
     const { toast } = useToast();
     const router = useTransitionRouter();
 
+    const showErrorMessage = (message: string) => {
+        toast({
+            variant: "destructive",
+            title: "An Error Occurred",
+            description: message,
+        });
+    }
+
     const handleError = async (error: unknown, redirect: boolean = true) => {
 
         if (error instanceof Error) {
-            toast({
-                variant: "destructive",
-                title: "An Error Occurred",
-                description: error.message,
-            });
+
+            if (error.message === 'Issues are disabled for this repo') { //error message not show in prod
+                toast({
+                    variant: "destructive",
+                    title: "An Error Occurred",
+                    description: "Issues are disabled for this repo",
+                });
+
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "An Error Occurred",
+                    description: error.message,
+                });
+            }
+
 
         } else {
             toast({
@@ -31,5 +50,5 @@ export default function useHandleError() {
     };
 
 
-    return handleError;
+    return { showErrorMessage, handleError };
 }

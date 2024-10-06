@@ -11,18 +11,12 @@ import {
     DialogTrigger,
     DialogClose
 } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-
-
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -33,8 +27,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { createIssue } from "@/actions/github";
 import { useParams } from "next/navigation";
 import useHandleError from "@/hooks/use-handle-error";
-import { useState } from "react";
-import { useTransitionRouter } from "next-view-transitions";
 import { State } from "./client";
 
 interface NewIssueProps {
@@ -57,19 +49,23 @@ export default function NewIssue({ state, setState }: NewIssueProps) {
         },
     })
     const params: { username: string, repo: string } = useParams();
-    const handleError = useHandleError();
+    const { showErrorMessage, handleError } = useHandleError();
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setState(state => ({ ...state, disabled: true }))
         try {
             const res = await createIssue(params.username, params.repo, values.title, values.description)
 
-            if (res) {
+            if (res.status) {
                 setState(state => ({ ...state, disabled: false, open: false, refresh: true }))
+            } else {
+                showErrorMessage(res.message)
+                setState(state => ({ ...state, disabled: false }))
             }
 
 
         } catch (error) {
+
             handleError(error, false)
             setState(state => ({ ...state, disabled: false }))
         }

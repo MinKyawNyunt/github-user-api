@@ -1,16 +1,12 @@
 'use client'
 import { useEffect, useState } from "react";
-import UserCard from "../../components/user-card";
 import Loader from "./loader";
 import Image from "next/image";
 import Grid from "@/components/grid";
 import { useTransitionRouter } from "next-view-transitions";
-// import useApi from "@/hooks/use-api";
-import { useParams, useSearchParams } from "next/navigation";
 import { getUsers, searchUsers } from "@/actions/github";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import useHandleError from "@/hooks/use-handle-error";
-// import { SearchUsersResponse } from '@octokit/types';
 
 interface User {
     login: string;
@@ -23,17 +19,15 @@ interface State {
     data: User[],
 }
 
-export default function Users() {
+export default function Users({ q }: { q: string }) {
 
     const [state, setState] = useState<State>({
         loading: true,
         data: [],
     })
     const router = useTransitionRouter();
-    // const { searchUsers } = useApi();
-    const searchParams = useSearchParams();
-    const q = searchParams.get('q');
-    const handleError = useHandleError();
+    const { showErrorMessage, handleError } = useHandleError();
+
     useEffect(() => {
         async function init() {
 
@@ -43,14 +37,17 @@ export default function Users() {
                 if (q) {
                     const res = await searchUsers(q);
 
-                    if (res) {
+                    if (res.status) {
                         setState(state => ({ ...state, data: res.data.items, loading: false }))
+                    } else {
+                        showErrorMessage(res.message)
                     }
                 } else {
                     const res = await getUsers();
-
-                    if (res) {
+                    if (res.status) {
                         setState(state => ({ ...state, data: res.data, loading: false }))
+                    } else {
+                        showErrorMessage(res.message)
                     }
                 }
             } catch (error) {
