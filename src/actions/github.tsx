@@ -4,7 +4,6 @@ import { Octokit as OK, RequestError } from "octokit";
 
 const octokit = new OK({
     auth: process.env.GITHUB_TOKEN,
-    // auth: 'test',
 });
 
 const request = async (url: string, payload: Record<string, string> = {}) => {
