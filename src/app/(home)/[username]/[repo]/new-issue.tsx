@@ -28,6 +28,7 @@ import { createIssue } from "@/actions/github";
 import { useParams } from "next/navigation";
 import useHandleError from "@/hooks/use-handle-error";
 import { State } from "./client";
+import { useToast } from "@/hooks/use-toast";
 
 interface NewIssueProps {
     state: State;
@@ -50,6 +51,7 @@ export default function NewIssue({ state, setState }: NewIssueProps) {
     })
     const params: { username: string, repo: string } = useParams();
     const { showErrorMessage, handleError } = useHandleError();
+    const { toast } = useToast();
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setState(state => ({ ...state, disabled: true }))
@@ -58,6 +60,11 @@ export default function NewIssue({ state, setState }: NewIssueProps) {
 
             if (res.status) {
                 setState(state => ({ ...state, disabled: false, open: false, refresh: true }))
+                toast({
+                    variant: "success",
+                    title: "Success",
+                    description: "New Issue Created",
+                });
             } else {
                 showErrorMessage(res.message)
                 setState(state => ({ ...state, disabled: false }))
