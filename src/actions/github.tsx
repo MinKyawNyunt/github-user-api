@@ -66,9 +66,9 @@ export const createIssue = async (
             body: body,
         });
     } catch (error) {
-        // if (error instanceof RequestError && error.status === 404) { //issue setting error
-        //     return { status: false, message: "An Error Occur. This is probably issues are disabled by repo owner!" }
-        // }
+        if (error instanceof RequestError && error.status === 404) { //issue setting error
+            return { status: false, message: "An Error Occur. This is probably issues are disabled by repo owner!" }
+        }
 
         throw error
     }
